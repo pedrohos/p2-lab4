@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 public class GrupoEstudos {
 	private String nome;
-	private HashSet<String> alunosCadastrados;
+	private HashSet<Aluno> alunosCadastrados;
 	
 	public GrupoEstudos(String nome) {
 		if(nome == null || nome.equals("")) {
@@ -15,15 +15,28 @@ public class GrupoEstudos {
 		this.alunosCadastrados = new HashSet<>();
 	}
 	
-	public String alocaAluno(String matricula) {
-		if (!alunosCadastrados.contains(matricula)) {
-			this.alunosCadastrados.add(matricula);
+	public String alocaAluno(Aluno aluno) {
+		if (!alunosCadastrados.contains(aluno)) {
+			this.alunosCadastrados.add(aluno);
 		}
 		return "ALUNO ALOCADO!";
 	}
 	
+	public int getQntAlunos() {
+		return this.alunosCadastrados.size();
+	}
+	
 	public String getNome() {
 		return this.nome;
+	}
+
+	@Override
+	public String toString() {
+		String resultado = "";
+		for (Aluno e: alunosCadastrados) {
+			resultado += e.toString() + "\n";
+		}
+		return resultado;
 	}
 
 	@Override

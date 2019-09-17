@@ -16,50 +16,44 @@ public class Menu {
 				  			"(I)mprimir Alunos que Responderam\r\n" + 
 				  			"(O)ra, vamos fechar o programa!\r\n" + 
 				  			"\n" + 
-				  			"OpÁ„o> ";
+				  			"Op√ß√£o> ";
 		
 		boolean rodando = true;
 		while (rodando) {
 			System.out.print(MENU);
 			switch(sc.nextLine()) {
 				case "C":
-					System.out.print("\n");
-					System.out.print(cadastrarAluno());
-					System.out.print("\n");
+					System.out.print("\n" + cadastrarAluno() + "\n");
 					break;
 				case "E":
-					System.out.print("\n");
-					System.out.println(exibirAlunoSistema());
-					System.out.print("\n");
+					System.out.println("\n" + exibirAlunoSistema() + "\n");
 					break;
 				case "N":
-					System.out.print("\n");
-					System.out.println(cadastrarGrupoSistema());
-					System.out.print("\n");
+					System.out.println("\n" + cadastrarGrupoSistema() + "\n");
 					break;
 				case "A":
-					System.out.print("\n");
-					System.out.print("(A)locar Aluno ou (I)mprimir Grupo? ");
+					System.out.print("\n(A)locar Aluno ou (I)mprimir Grupo? ");
 					String opcao = sc.nextLine();
 					System.out.print("\n");
 					if(opcao.equals("A")) {
-						System.out.println(alocaAlunoSistema());
-						System.out.print("\n");
+						System.out.println(alocaAlunoSistema() + "\n");
 					} else if(opcao.equals("I")) {
-						
+						System.out.println(imprimeGrupoSistema() + "\n");
 					} else {
-						throw new IllegalArgumentException("OP«√O INV¡LIDA!");
+						throw new IllegalArgumentException("OP√á√ÉO INV√ÅLIDA!");
 					}
 					break;
 				case "R":
+					System.out.print(cadastraPerguntaRespondidaSistema() + "\n");
 					break;
 				case "I":
+					System.out.print(sistema.imprimePerguntaRespondida());
 					break;
 				case "O":
 					rodando = false;
 					break;
 				default:
-					throw new IllegalArgumentException("OP«√O INV¡LIDA!");
+					throw new IllegalArgumentException("OP√á√ÉO INV√ÅLIDA!");
 			}
 		}
 	}
@@ -73,7 +67,7 @@ public class Menu {
 	}
 	
 	private static String cadastrarAluno() {
-		System.out.print("MatrÌcula: ");
+		System.out.print("Matr√≠cula: ");
 		String matricula = validaEntrada();
 		System.out.print("Nome: ");
 		String nome = validaEntrada();
@@ -83,7 +77,7 @@ public class Menu {
 	}
 	
 	private static String exibirAlunoSistema() {
-		System.out.print("MatrÌcula: ");
+		System.out.print("Matr√≠cula: ");
 		String matricula = validaEntrada();
 		System.out.print("\n");
 		return sistema.exibirAluno(matricula);
@@ -92,16 +86,27 @@ public class Menu {
 	private static String cadastrarGrupoSistema() {
 		System.out.print("Grupo: ");
 		String nome = validaEntrada();
-		System.out.print("\n");
 		return sistema.cadastrarGrupo(nome);
 	}
 	
 	private static String alocaAlunoSistema() {
-		System.out.print("MatrÌcula: ");
+		System.out.print("Matr√≠cula: ");
 		String nome = validaEntrada();
 		System.out.print("Grupo: ");
 		String grupo = validaEntrada();
 		return sistema.alocaAluno(nome, grupo);
+	}
+	
+	private static String imprimeGrupoSistema() {
+		System.out.print("Grupo: ");
+		String grupo = validaEntrada();
+		return sistema.imprimeGrupo(grupo);
+	}
+	
+	private static String cadastraPerguntaRespondidaSistema() {
+		System.out.print("Matr√≠cula: ");
+		String matricula = validaEntrada();
+		return sistema.cadastraPerguntaRespondida(matricula);
 	}
 	
 }

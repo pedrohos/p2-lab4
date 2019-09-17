@@ -1,20 +1,23 @@
 package controleAlunos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class Sistema {
 	HashMap<String, Aluno> mapaMatriculaAlunos;
 	HashSet<GrupoEstudos> grupos;
+	ArrayList<Aluno> alunosResponderam;
 	
 	public Sistema() {
 		mapaMatriculaAlunos = new HashMap<>();
 		grupos = new HashSet<>();
+		this.alunosResponderam =  new ArrayList<>();
 	}
 	
 	public String cadastraAluno(String matricula, String nome, String curso) {
 		if(procuraMatricula(matricula)) {
-			return "MATRÕCULA J¡ CADASTRADA!\n";
+			return "MATR√çCULA J√Å CADASTRADA!\n";
 		}
 		Aluno aluno = new Aluno(matricula, nome, curso);
 		this.mapaMatriculaAlunos.put(matricula, aluno);
@@ -34,21 +37,21 @@ public class Sistema {
 		if(procuraMatricula(matricula)) {
 			return getAlunoString(matricula);
 		}
-		return "Aluno n„o cadastrado.";
+		return "Aluno n√£o cadastrado.";
 	}
 	
 	public String getAlunoString(String matricula) {
 		if (procuraMatricula(matricula)) {
 			return this.mapaMatriculaAlunos.get(matricula).toString();
 		}
-		return "Aluno n„o cadastrado.";
+		return "Aluno n√£o cadastrado.";
 	}
 	
 	public String cadastrarGrupo(String nome) {
 		GrupoEstudos grupo = new GrupoEstudos(nome);
 		for (GrupoEstudos e: grupos) {
 			if(e.equals(grupo)) {
-				return "GRUPO J¡ CADASTRADO!";
+				return "GRUPO J√Å CADASTRADO!";
 			}
 		}
 		this.grupos.add(grupo);
@@ -56,14 +59,50 @@ public class Sistema {
 	}
 	
 	public String alocaAluno(String matricula, String nomeGrupo) {
-		if(!mapaMatriculaAlunos.containsKey(matricula)) {
-			return "Aluno n„o cadastrado.";
+		if(!this.mapaMatriculaAlunos.containsKey(matricula)) {
+			return "Aluno n√£o cadastrado.";
 		}
 		for (GrupoEstudos e: grupos) {
 			if(e.getNome().equals(nomeGrupo)) {
-				return e.alocaAluno(matricula);
+				return e.alocaAluno(mapaMatriculaAlunos.get(matricula));
 			}
 		}
-		return "Grupo n„o cadastrado.";
+		return "Grupo n√£o cadastrado.";
+	}
+	
+	public String imprimeGrupo(String grupo) {
+		String resultado = "\nAlunos do grupo " + grupo + ":\n";
+		for (GrupoEstudos e: grupos) {
+			if(e.getNome().equals(grupo)) {
+				if (e.getQntAlunos() == 0) {
+					return "N√£o h√° alunos cadastrados.";
+				}
+				resultado += "* " + e.toString() + "\n";
+				return resultado;
+			}
+			
+		}
+		
+		return "Grupo n√£o cadastrado.";
+	}
+	
+	public String cadastraPerguntaRespondida(String matricula) {
+		if(!this.mapaMatriculaAlunos.containsKey(matricula)) {
+			return "Aluno n√£o cadastrado.\n";
+		}
+		this.alunosResponderam.add(this.mapaMatriculaAlunos.get(matricula));
+		return "ALUNO REGISTRADO!\n";
+	}
+	
+	public String imprimePerguntaRespondida() {
+		if(this.alunosResponderam.size() == 0) {
+			return "Nenhuma pergunta cadastrada.\n\n";
+		}
+		
+		String resultado = "Alunos:\n";
+		for(int i = 0; i < this.alunosResponderam.size(); i++) {
+			resultado += (i + 1) + ". " + this.alunosResponderam.get(i).toString() + "\n";
+		}
+		return resultado + "\n";
 	}
 }
