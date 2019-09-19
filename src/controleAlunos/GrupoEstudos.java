@@ -3,31 +3,40 @@ package controleAlunos;
 import java.util.HashSet;
 
 public class GrupoEstudos {
-	private String nome;
+	private String nomeCadastrado;
+	private String nomeArmazenado;
 	private HashSet<Aluno> alunosCadastrados;
 	
 	public GrupoEstudos(String nome) {
+		nome = nome.trim();
+		
 		if(nome == null || nome.equals("")) {
 			throw new IllegalArgumentException("ENTRADA NUlA OU VAZIA!");
 		}
 		
-		this.nome = nome;
+		this.nomeCadastrado = nome;
+		this.nomeArmazenado = nome.toLowerCase();
 		this.alunosCadastrados = new HashSet<>();
 	}
 	
-	public String alocaAluno(Aluno aluno) {
+	public Boolean alocaAluno(Aluno aluno) {
 		if (!alunosCadastrados.contains(aluno)) {
 			this.alunosCadastrados.add(aluno);
+			return true;
 		}
-		return "ALUNO ALOCADO!";
+		return false;
 	}
 	
 	public int getQntAlunos() {
 		return this.alunosCadastrados.size();
 	}
 	
-	public String getNome() {
-		return this.nome;
+	public String getNomeReal() {
+		return this.nomeCadastrado;
+	}
+	
+	public String getNomeArmazenado() {
+		return this.nomeArmazenado;
 	}
 
 	@Override
@@ -43,7 +52,7 @@ public class GrupoEstudos {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((nomeArmazenado == null) ? 0 : nomeArmazenado.hashCode());
 		return result;
 	}
 
@@ -56,13 +65,12 @@ public class GrupoEstudos {
 		if (getClass() != obj.getClass())
 			return false;
 		GrupoEstudos other = (GrupoEstudos) obj;
-		if (nome == null) {
-			if (other.nome != null)
+		if (nomeArmazenado == null) {
+			if (other.nomeArmazenado != null)
 				return false;
-		} else if (!nome.equals(other.nome))
+		} else if (!nomeArmazenado.equals(other.nomeArmazenado))
 			return false;
 		return true;
 	}
-	
 	
 }

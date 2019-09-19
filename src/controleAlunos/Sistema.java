@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Sistema {
-	HashMap<String, Aluno> mapaMatriculaAlunos;
-	HashSet<GrupoEstudos> grupos;
-	ArrayList<Aluno> alunosResponderam;
+	private final static String LS = System.lineSeparator();
+	private HashMap<String, Aluno> mapaMatriculaAlunos;
+	private HashSet<GrupoEstudos> grupos;
+	private ArrayList<Aluno> alunosResponderam;
 	
 	public Sistema() {
 		mapaMatriculaAlunos = new HashMap<>();
@@ -15,13 +16,13 @@ public class Sistema {
 		this.alunosResponderam =  new ArrayList<>();
 	}
 	
-	public String cadastraAluno(String matricula, String nome, String curso) {
+	public Boolean cadastraAluno(String matricula, String nome, String curso) {
 		if(procuraMatricula(matricula)) {
-			return "MATRÍCULA JÁ CADASTRADA!\n";
+			return true;
 		}
 		Aluno aluno = new Aluno(matricula, nome, curso);
 		this.mapaMatriculaAlunos.put(matricula, aluno);
-		return "CADASTRO REALIZADO!\n";
+		return false;
 	}
 	
 	public boolean procuraMatricula(String matricula) {
@@ -37,72 +38,72 @@ public class Sistema {
 		if(procuraMatricula(matricula)) {
 			return getAlunoString(matricula);
 		}
-		return "Aluno não cadastrado.";
+		return null;
 	}
 	
 	public String getAlunoString(String matricula) {
-		if (procuraMatricula(matricula)) {
-			return this.mapaMatriculaAlunos.get(matricula).toString();
-		}
-		return "Aluno não cadastrado.";
+		return this.mapaMatriculaAlunos.get(matricula).toString();
 	}
 	
-	public String cadastrarGrupo(String nome) {
+	public Boolean cadastrarGrupo(String nome) {
 		GrupoEstudos grupo = new GrupoEstudos(nome);
 		for (GrupoEstudos e: grupos) {
 			if(e.equals(grupo)) {
-				return "GRUPO JÁ CADASTRADO!";
+				return false;
 			}
 		}
 		this.grupos.add(grupo);
-		return "CADASTRO REALIZADO!";
+		return true;
 	}
 	
 	public String alocaAluno(String matricula, String nomeGrupo) {
 		if(!this.mapaMatriculaAlunos.containsKey(matricula)) {
-			return "Aluno não cadastrado.";
+			return "NaNAluno";
 		}
+		nomeGrupo = nomeGrupo.toLowerCase();
 		for (GrupoEstudos e: grupos) {
-			if(e.getNome().equals(nomeGrupo)) {
-				return e.alocaAluno(mapaMatriculaAlunos.get(matricula));
+			if(e.getNomeArmazenado().equals(nomeGrupo)) {
+				if(e.alocaAluno(mapaMatriculaAlunos.get(matricula))) {
+					return "";
+				}
 			}
 		}
-		return "Grupo não cadastrado.";
+		return "NaNGrupo";
 	}
 	
 	public String imprimeGrupo(String grupo) {
-		String resultado = "\nAlunos do grupo " + grupo + ":\n";
+		String resultado = LS + "Alunos do grupo " + grupo + ":" + LS;
+		grupo = grupo.toLowerCase();
 		for (GrupoEstudos e: grupos) {
-			if(e.getNome().equals(grupo)) {
+			if(e.getNomeArmazenado().equals(grupo)) {
 				if (e.getQntAlunos() == 0) {
-					return "Não há alunos cadastrados.";
+					return null;
 				}
-				resultado += "* " + e.toString() + "\n";
+				resultado += "* " + e.toString() + LS;
 				return resultado;
 			}
-			
 		}
 		
-		return "Grupo não cadastrado.";
+		return null;
 	}
 	
-	public String cadastraPerguntaRespondida(String matricula) {
+	public Boolean cadastraPerguntaRespondida(String matricula) {
 		if(!this.mapaMatriculaAlunos.containsKey(matricula)) {
-			return "Aluno não cadastrado.\n";
+			return false;
 		}
 		this.alunosResponderam.add(this.mapaMatriculaAlunos.get(matricula));
-		return "ALUNO REGISTRADO!\n";
+		return true;
 	}
 	
 	public String imprimePerguntaRespondida() {
 		if(this.alunosResponderam.size() == 0) {
-			return "Nenhuma pergunta cadastrada.\n\n";
+			return null;
 		}
 		
 		String resultado = "Alunos:\n";
 		for(int i = 0; i < this.alunosResponderam.size(); i++) {
-			resultado += (i + 1) + ". " + this.alunosResponderam.get(i).toString() + "\n";
+			resultado += (i + 1) + ". " + this.alunosResponderam.get(i).toString() + LS;
 		}
-		return resultado + "\n";
+		return resultado + LS;
 	}
 }
